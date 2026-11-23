@@ -26,8 +26,14 @@ SENTENCE = (
 
 def main() -> None:
     # Gate self-check: the sealed scorer only accepts UTF-8 text of
-    # 1 to 240 characters that is not only white space.
-    if not 1 <= len(SENTENCE) <= 240 or not SENTENCE.strip():
+    # 1 to 240 characters that is not only white space, and the task
+    # asks for one sentence on one line, so a newline would break it.
+    if (
+        not 1 <= len(SENTENCE) <= 240
+        or not SENTENCE.strip()
+        or "\n" in SENTENCE
+        or "\r" in SENTENCE
+    ):
         raise ValueError("sentence fails the 1-240 character gate")
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
